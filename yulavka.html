@@ -306,6 +306,23 @@ textarea.big-in{resize:none;height:96px;line-height:1.5}
 .nb.courier-nb{display:none}
 .has-courier .nb.courier-nb{display:flex}
 
+
+/* --- GLASS UI --- */
+.glass-card{
+background:rgba(255,255,255,0.7);
+backdrop-filter:blur(10px);
+-webkit-backdrop-filter:blur(10px);
+border-radius:18px;
+border:1px solid rgba(255,255,255,0.35);
+}
+
+/* glass cart */
+.cart-glass{
+background:rgba(255,255,255,0.75);
+backdrop-filter:blur(12px);
+border-top:1px solid rgba(255,255,255,0.4);
+}
+
 </style>
 </head>
 <body>
@@ -1468,5 +1485,57 @@ document.addEventListener('contextmenu',e=>e.preventDefault());
 initTG();
 initHome();
 </script>
+
+<script>
+/* TELEGRAM FULLSCREEN */
+const tg = window.Telegram.WebApp;
+tg.ready();
+setTimeout(()=>tg.expand(),200);
+
+/* FIX ACTIVE CART BUTTON */
+function setActiveNav(id){
+document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+const el=document.querySelector('[data-nav="'+id+'"]');
+if(el) el.classList.add('active');
+}
+
+/* PRIVATE HOUSE TOGGLE */
+document.addEventListener("change",(e)=>{
+ if(e.target.id==="privateHouse"){
+   document.querySelectorAll(".apartment-fields").forEach(el=>{
+     el.style.display=e.target.checked?"none":"block";
+   });
+ }
+});
+
+/* TARA +280 */
+let taraAdded=false;
+function toggleTara(){
+const priceEl=document.getElementById("tara-price");
+if(!priceEl) return;
+taraAdded=!taraAdded;
+priceEl.innerText=taraAdded?"Добавлено (+280 ₽)":"Добавить тару (+280 ₽)";
+}
+
+/* DELIVERY MODE SWITCH (admin config) */
+window.deliveryMode="days"; // "time" or "days"
+
+function renderDelivery(){
+const days=document.getElementById("delivery-days");
+const time=document.getElementById("delivery-time");
+if(!days||!time) return;
+
+if(window.deliveryMode==="days"){
+days.style.display="flex";
+time.style.display="none";
+}else{
+days.style.display="none";
+time.style.display="block";
+}
+}
+
+document.addEventListener("DOMContentLoaded",renderDelivery);
+</script>
+
 </body>
 </html>
